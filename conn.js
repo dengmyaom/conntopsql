@@ -1,29 +1,30 @@
-import {Client} from 'pg'
+import { Pool } from 'pg'
 import 'dotenv/config'
 
-const client = new Client({
+const pool = new Pool({
     user:     process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host:     process.env.DB_HOST,
-    port:     process.env.DB_PORT,
-    database: process.env.DB_NAME
+    port:     Number(process.env.DB_PORT),
+    database: process.env.DB_NAME,
+    max:      Number(process.env.DB_POOL_SIZE) || 10,
+    idleTimeoutMillis: 30_000
 })
 
-async function openDB() {
-    await client.connect()
+async function queryDB(queryText, params = []) {
+    const client = await pool.connect()
+    try {
+        return await client.query(queryText, params)
+    } finally {
+        client.release()
+    }
 }
 
-async function closeDB() {
-    await client.end()
-}
-
-async function queryDB(q) {
-    openDB()
-    const data = await client.query(q)
-    closeDB()
-    return data
+async function closePool() {
+    await pool.end()
 }
 
 export {
-    openDB,queryDB,closeDB
+    queryDB,
+    closePool
 }

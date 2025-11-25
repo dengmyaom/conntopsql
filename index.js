@@ -1,5 +1,10 @@
-import { createServer } from 'http'
-import { queryDB } from './conn.js'
+import { queryDB, closePool } from './conn.js'
 
-const data = await queryDB("SELECT * FROM students");
-console.table(data.rows)
+try {
+    const data = await queryDB('SELECT * FROM students')
+    console.table(data.rows)
+} catch (error) {
+    console.error('Failed to query database:', error)
+} finally {
+    await closePool()
+}
