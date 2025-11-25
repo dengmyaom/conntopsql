@@ -1,39 +1,49 @@
 # Simple Node.js PostgreSQL connection Example
 
-> A samll project demonstrating how to connect to a PostgreSQL database using Node.js and retrieve data from a table,then display it in the console.
+> A samll project demonstrating how to connect to a PostgreSQL database using Node.js, execute a SQL query and display the results in the console.
 
-----------
+----
+
 ## Poroject Description
-this project contains two main files:
-- conn.js : Handles the connection to the postgreSQL database.
-- index.js: Fetches data from the database and prints it in the console.
-This setup is useful for beginners learning how to intgrate Node.js with PostgreSQL.
-
-## Files Overview
-### `conn.js`
-- Creates and exports a PostgreSQL client.
-- Uses environment variables from `.env` to store DB credentials.
-
-### `index.js`
-- Imports the client from `conn.js`.
-- Executes a SQL query.
-- Logs the results in the console.
-
-## Features
-- Connect to PostgreSQL using Node.js.
-- Simple and clean code structure.
-- Demonstrates basic data featching.
-- Uses `dotenv` for environment variable handling.
+This project contains two main files:
+- **conn.js** - Manages the PostgreSQL connection pool using the `pg` library and loads environment variables with `dotenv`.
+- **index.js** - Performs a SQL query and displays the result in the console.
+  
+This simple structure is ideal for beginners learning how to intgrate Node.js with PostgreSQL.
 
 ---
 
-## REquirements
+## Files Overview
+### `conn.js`
+- Uses `pg.Pool` to Create a connection pool.
+- Reads configuration values from environment variables.
+- Exports functions to execute queries and close the pool.
+- Ensures proper connection release using try/finally.
+  
+### `index.js`
+- Imports the database query function from `conn.js`.
+- Runs a sample SQL query.
+- Prints results using `console.table`.
+- Closes the connection pool safely.
+
+---
+
+## Features
+- PostgreSQL connection pooling.
+- Clean and modern ES Modules.
+- Safe query execution with parameters.
+- Environment variable handling with `dotenv`.
+- Very simple and biginner-friendly structure.
+  
+---
+
+## Requirements
 Make sure you have installed:
 
-- Node.js (v14 or higher)
-- PostgreSQL
-- npm
-
+- **Node.js** (v16 or higher recommended)
+- **PostgreSQL**
+- **npm**
+  
 ---
 
 ## Installation & Usage
@@ -56,10 +66,13 @@ DB_PASS=your_database_password
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=your_database_name
+DB_POOL_SIZE=10
 
 ### [4] Run the project
 ```bash
   node index.js
-or
+```
+Or if you added on npm script:
+```bash
  npm start
 ```
